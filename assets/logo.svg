@@ -1,13 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="344" height="76" viewBox="0 0 344 76" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="72" viewBox="0 0 330 72" role="img" aria-labelledby="title desc">
   <title id="title">SebsWebs</title>
-  <desc id="desc">SebsWebs logo with browser window and cursor mark</desc>
-  <rect x="4" y="12" width="58" height="48" rx="12" fill="none" stroke="#007a78" stroke-width="5"/>
-  <circle cx="18" cy="26" r="4" fill="#ffc20f"/>
-  <circle cx="31" cy="26" r="4" fill="#ffc20f"/>
-  <circle cx="44" cy="26" r="4" fill="#ffc20f"/>
-  <path d="M45 37l-21-9 8 23 5-8 8 9 7-6-8-8 1-1z" fill="#007a78"/>
-  <path d="M24 38h-8M28 31l-5-6M35 29v-9" stroke="#ffc20f" stroke-width="4" stroke-linecap="round"/>
-  <text x="80" y="52" font-family="Inter, Arial, sans-serif" font-size="43" font-weight="800" letter-spacing="0">
+  <desc id="desc">SebsWebs logo with teal monogram mark and wordmark</desc>
+  <rect x="6" y="10" width="52" height="52" rx="14" fill="#007a78"/>
+  <path d="M45 18h5v5" fill="none" stroke="#ffc20f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 18l-9 9" fill="none" stroke="#ffc20f" stroke-width="4" stroke-linecap="round"/>
+  <text x="32" y="47" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" letter-spacing="0">S</text>
+  <text x="74" y="50" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" letter-spacing="0">
     <tspan fill="#142034">Sebs</tspan><tspan fill="#007a78">Webs</tspan>
   </text>
 </svg>
