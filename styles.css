@@ -793,6 +793,11 @@ h2 {
     width: 150px;
   }
 
+  .eyebrow {
+    max-width: 100%;
+    white-space: normal;
+  }
+
   h1 {
     font-size: clamp(2.65rem, 11.8vw, 3.35rem);
     line-height: 1.08;
@@ -809,10 +814,15 @@ h2 {
     max-width: calc(100vw - 40px);
   }
 
+  .hero-text {
+    overflow-wrap: break-word;
+  }
+
   .hero-actions,
   .button,
   .header-cta {
     width: 100%;
+    max-width: 100%;
   }
 
   .proof-grid,
