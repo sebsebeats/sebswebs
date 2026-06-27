@@ -30,6 +30,7 @@ quoteForm.addEventListener("submit", (event) => {
 
   const data = new FormData(quoteForm);
   const name = data.get("name").trim();
+  const email = data.get("email").trim();
   const business = data.get("business").trim();
   const packageChoice = data.get("package");
   const message = data.get("message").trim();
@@ -37,13 +38,20 @@ quoteForm.addEventListener("submit", (event) => {
   const subject = `SebsWebs quote request - ${business}`;
   const body = [
     `Name: ${name}`,
+    `Email: ${email}`,
     `Business type: ${business}`,
     `Package: ${packageChoice}`,
     "",
     "Message:",
-    message || "I would like a quote for a website."
+    message || "I would like a quote for a website.",
+    "",
+    "Useful details if you have them:",
+    "- Current website/domain:",
+    "- Pages needed:",
+    "- Photos/logo ready:",
+    "- Ideal deadline:"
   ].join("\n");
 
-  formNote.textContent = "Opening your email app with the quote details filled in.";
-  window.location.href = `mailto:hello@sebswebs.co.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  formNote.textContent = "Opening your email app with the quote details filled in. If nothing opens, email sebybanham@gmail.com directly.";
+  window.location.href = `mailto:sebybanham@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });

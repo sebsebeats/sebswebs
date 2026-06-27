@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --ink: #142034;
   --muted: #5a6575;
   --teal: #007a78;
@@ -592,6 +592,44 @@ h2 {
   line-height: 1.55;
 }
 
+.payment-scope {
+  max-width: 1180px;
+  margin: 72px auto 0;
+  padding-top: 70px;
+  border-top: 1px solid var(--line);
+}
+
+.scope-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.scope-item {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--soft);
+}
+
+.scope-item p {
+  color: var(--teal);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.scope-item h3 {
+  margin-bottom: 12px;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.scope-item span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .featured {
   background: linear-gradient(180deg, #fffdf3, #ffffff);
 }
@@ -689,6 +727,57 @@ h2 {
   font-weight: 800;
 }
 
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.legal-main {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.legal-hero {
+  padding-bottom: 36px;
+}
+
+.legal-hero h1 {
+  max-width: 850px;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+}
+
+.legal-content {
+  padding-top: 36px;
+}
+
+.legal-block {
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+
+.legal-block h2 {
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+}
+
+.legal-block p,
+.legal-block li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.legal-block ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 22px;
+}
+
 @media (max-width: 1020px) {
   .site-header {
     grid-template-columns: auto auto;
@@ -761,7 +850,8 @@ h2 {
   .example-grid,
   .pricing-panel,
   .proof-grid,
-  .care-grid {
+  .care-grid,
+  .scope-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -829,7 +919,8 @@ h2 {
   .service-grid,
   .example-grid,
   .pricing-panel,
-  .care-grid {
+  .care-grid,
+  .scope-grid {
     grid-template-columns: 1fr;
   }
 
@@ -854,5 +945,11 @@ h2 {
   .site-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-links {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
 }
