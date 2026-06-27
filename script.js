@@ -46,6 +46,7 @@ quoteForm.addEventListener("submit", (event) => {
     message || "I would like a quote for a website.",
     "",
     "Useful details if you have them:",
+    "- Location in Essex:",
     "- Current website/domain:",
     "- Pages needed:",
     "- Photos/logo ready:",
