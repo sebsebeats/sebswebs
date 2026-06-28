@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --ink: #142034;
   --muted: #5a6575;
   --teal: #007a78;
@@ -697,11 +697,35 @@ h2 {
   box-shadow: 0 0 0 4px rgba(0, 122, 120, 0.12);
 }
 
+.quote-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.hidden-field {
+  display: none;
+}
+
 .form-note {
   margin: 0;
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.5;
+}
+
+.form-note[data-state="success"] {
+  color: #146c43;
+  font-weight: 700;
+}
+
+.form-note[data-state="error"] {
+  color: #9b1c1c;
+  font-weight: 700;
+}
+
+.form-note[data-state="pending"] {
+  color: var(--teal);
+  font-weight: 700;
 }
 
 .site-footer {
