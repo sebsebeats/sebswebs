@@ -1,15 +1,81 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SebsWebs | Affordable Websites for Essex Businesses</title>
-  <meta name="description" content="SebsWebs builds affordable, professional websites for small businesses in Essex, from simple starter pages to editable business sites and ongoing care.">
+  <title>SebsWebs | Affordable Website Design in Essex</title>
+  <meta name="description" content="SebsWebs builds affordable, professional website design for small businesses in Essex, from simple starter pages to editable business sites and ongoing care.">
+  <link rel="canonical" href="https://sebswebs.co.uk/">
+  <meta name="theme-color" content="#007a78">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SebsWebs">
+  <meta property="og:title" content="SebsWebs | Affordable Website Design in Essex">
+  <meta property="og:description" content="Affordable, professional website design for small Essex businesses, from simple starter pages to editable business sites and ongoing care.">
+  <meta property="og:url" content="https://sebswebs.co.uk/">
+  <meta property="og:image" content="https://sebswebs.co.uk/assets/hero-workspace.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SebsWebs | Affordable Website Design in Essex">
+  <meta name="twitter:description" content="Affordable websites for small Essex businesses that need trust, enquiries and a cleaner online presence.">
+  <meta name="twitter:image" content="https://sebswebs.co.uk/assets/hero-workspace.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://sebswebs.co.uk/#business",
+          "name": "SebsWebs",
+          "url": "https://sebswebs.co.uk/",
+          "logo": "https://sebswebs.co.uk/assets/logo.svg",
+          "image": "https://sebswebs.co.uk/assets/hero-workspace.png",
+          "email": "sebybanham@gmail.com",
+          "founder": {
+            "@type": "Person",
+            "name": "Seb Banham"
+          },
+          "areaServed": [
+            {
+              "@type": "AdministrativeArea",
+              "name": "Essex"
+            },
+            {
+              "@type": "City",
+              "name": "Chelmsford"
+            },
+            {
+              "@type": "City",
+              "name": "Maldon"
+            },
+            {
+              "@type": "City",
+              "name": "Billericay"
+            }
+          ],
+          "serviceType": [
+            "Small business website design",
+            "Affordable local business websites",
+            "Website care and updates"
+          ],
+          "priceRange": "Starter websites from 149 GBP"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://sebswebs.co.uk/#website",
+          "name": "SebsWebs",
+          "url": "https://sebswebs.co.uk/",
+          "publisher": {
+            "@id": "https://sebswebs.co.uk/#business"
+          }
+        }
+      ]
+    }
+  </script>
 </head>
 <body>
   <header class="site-header" data-header>
@@ -38,8 +104,8 @@
   <main id="home">
     <section class="hero section-pad">
       <div class="hero-copy">
-        <p class="eyebrow">Affordable websites for Essex businesses</p>
-        <h1>Professional websites without the <span>agency price</span>.</h1>
+        <p class="eyebrow">Affordable website design in Essex</p>
+        <h1>Professional websites for <span>small Essex businesses</span>.</h1>
         <p class="hero-text">SebsWebs builds clean, fast and mobile-friendly websites for small Essex businesses that need to explain what they do, build trust quickly and make it easy for people to enquire.</p>
         <div class="hero-actions">
           <a class="button primary" href="#contact">Get a free quote <span aria-hidden="true">-></span></a>
@@ -354,8 +420,18 @@
           <textarea name="message" rows="5" placeholder="Tell me about the business, location in Essex, pages needed, and any examples you like."></textarea>
         </label>
         <button class="button primary" type="submit" data-submit-button>Send quote request <span aria-hidden="true">-></span></button>
-        <p class="form-note" data-form-note>Submissions go to sebybanham@gmail.com. The first test may ask you to activate the form by email.</p>
+        <p class="form-note" data-form-note>Submissions go to sebybanham@gmail.com.</p>
       </form>
+
+      <div class="form-dialog" data-form-dialog hidden>
+        <div class="form-dialog-backdrop" data-form-dialog-close></div>
+        <div class="form-dialog-panel" role="alertdialog" aria-modal="true" aria-labelledby="form-dialog-title" aria-describedby="form-dialog-message">
+          <span class="form-dialog-icon" data-form-dialog-icon aria-hidden="true">OK</span>
+          <h3 id="form-dialog-title" data-form-dialog-title>Quote request sent</h3>
+          <p id="form-dialog-message" data-form-dialog-message>Thanks - your request has been sent. I will reply by email as soon as possible.</p>
+          <button class="button primary" type="button" data-form-dialog-close>Back to website</button>
+        </div>
+      </div>
     </section>
   </main>
 

@@ -4,23 +4,41 @@ const navLinks = document.querySelectorAll(".site-nav a");
 const quoteForm = document.querySelector("[data-quote-form]");
 const formNote = document.querySelector("[data-form-note]");
 const submitButton = document.querySelector("[data-submit-button]");
+const formDialog = document.querySelector("[data-form-dialog]");
+const formDialogTitle = document.querySelector("[data-form-dialog-title]");
+const formDialogMessage = document.querySelector("[data-form-dialog-message]");
+const formDialogIcon = document.querySelector("[data-form-dialog-icon]");
+const formDialogCloseButtons = document.querySelectorAll("[data-form-dialog-close]");
 const fallbackEmail = "sebybanham@gmail.com";
+const defaultFormNote = formNote ? formNote.textContent : "";
 
 const setHeaderState = () => {
+  if (!header) {
+    return;
+  }
+
   header.classList.toggle("is-scrolled", window.scrollY > 8);
 };
 
 setHeaderState();
-window.addEventListener("scroll", setHeaderState, { passive: true });
+if (header) {
+  window.addEventListener("scroll", setHeaderState, { passive: true });
+}
 
-menuToggle.addEventListener("click", () => {
-  const isOpen = header.classList.toggle("is-open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
-});
+if (menuToggle && header) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = header.classList.toggle("is-open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  });
+}
 
 navLinks.forEach((link) => {
   link.addEventListener("click", () => {
+    if (!header || !menuToggle) {
+      return;
+    }
+
     header.classList.remove("is-open");
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.setAttribute("aria-label", "Open menu");
@@ -57,47 +75,108 @@ const buildFallbackEmail = (data) => {
 };
 
 const setFormState = (message, state) => {
-  formNote.textContent = message;
-  formNote.dataset.state = state;
-};
-
-quoteForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const data = new FormData(quoteForm);
-  if (data.get("_honey")) {
+  if (!formNote) {
     return;
   }
 
-  const business = data.get("business").trim();
-  data.set("_subject", `SebsWebs quote request - ${business}`);
-  data.set("Source page", window.location.href);
+  formNote.textContent = message;
+  if (state) {
+    formNote.dataset.state = state;
+  } else {
+    delete formNote.dataset.state;
+  }
+};
 
-  const fallbackUrl = buildFallbackEmail(data);
-  const defaultButtonText = submitButton.innerHTML;
+const resetFormState = () => {
+  setFormState(defaultFormNote, "");
+};
 
-  try {
-    submitButton.disabled = true;
-    submitButton.innerHTML = "Sending request...";
-    setFormState("Sending your request...", "pending");
+const showFormDialog = ({ title, message, state }) => {
+  if (!formDialog || !formDialogTitle || !formDialogMessage || !formDialogIcon) {
+    return;
+  }
 
-    const response = await fetch(quoteForm.dataset.formEndpoint, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: data
-    });
+  formDialogTitle.textContent = title;
+  formDialogMessage.textContent = message;
+  formDialog.dataset.state = state;
+  formDialogIcon.textContent = state === "success" ? "OK" : "!";
+  formDialog.hidden = false;
+  document.body.classList.add("dialog-open");
 
-    if (!response.ok) {
-      throw new Error("Form submission failed");
-    }
+  const closeButton = formDialog.querySelector("button");
+  if (closeButton) {
+    closeButton.focus();
+  }
+};
 
-    quoteForm.reset();
-    setFormState("Thanks - your request has been sent. I will reply by email as soon as possible.", "success");
-  } catch (error) {
-    setFormState(`The form could not send automatically. Opening an email draft to ${fallbackEmail} instead.`, "error");
-    window.location.href = fallbackUrl;
-  } finally {
-    submitButton.disabled = false;
-    submitButton.innerHTML = defaultButtonText;
+const closeFormDialog = () => {
+  if (!formDialog) {
+    return;
+  }
+
+  formDialog.hidden = true;
+  document.body.classList.remove("dialog-open");
+};
+
+formDialogCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeFormDialog);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && formDialog && !formDialog.hidden) {
+    closeFormDialog();
   }
 });
+
+if (quoteForm && submitButton) {
+  quoteForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(quoteForm);
+    if (data.get("_honey")) {
+      return;
+    }
+
+    const business = data.get("business").trim();
+    data.set("_subject", `SebsWebs quote request - ${business}`);
+    data.set("Source page", window.location.href);
+
+    const fallbackUrl = buildFallbackEmail(data);
+    const defaultButtonText = submitButton.innerHTML;
+
+    try {
+      submitButton.disabled = true;
+      submitButton.innerHTML = "Sending request...";
+      setFormState("Sending your request...", "pending");
+
+      const response = await fetch(quoteForm.dataset.formEndpoint, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: data
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      quoteForm.reset();
+      resetFormState();
+      showFormDialog({
+        title: "Quote request sent",
+        message: "Thanks - your request has been sent. I will reply by email as soon as possible.",
+        state: "success"
+      });
+    } catch (error) {
+      resetFormState();
+      showFormDialog({
+        title: "Email draft opened",
+        message: `The form could not send automatically, so an email draft has opened for ${fallbackEmail}. Send that email to make sure your request arrives.`,
+        state: "error"
+      });
+      window.location.href = fallbackUrl;
+    } finally {
+      submitButton.disabled = false;
+      submitButton.innerHTML = defaultButtonText;
+    }
+  });
+}
