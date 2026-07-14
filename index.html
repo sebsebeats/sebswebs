@@ -17,12 +17,10 @@
   <meta name="twitter:title" content="SebsWebs | Affordable Website Design in Essex">
   <meta name="twitter:description" content="Affordable websites for small Essex businesses that need trust, enquiries and a cleaner online presence.">
   <meta name="twitter:image" content="https://sebswebs.co.uk/assets/hero-workspace.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="privacy-fixes.css">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -108,7 +106,7 @@
         <h1>Professional websites for <span>small Essex businesses</span>.</h1>
         <p class="hero-text">SebsWebs builds clean, fast and mobile-friendly websites for small Essex businesses that need to explain what they do, build trust quickly and make it easy for people to enquire.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#contact">Get a free quote <span aria-hidden="true">-></span></a>
+          <a class="button primary" href="#contact">Get a free quote <span aria-hidden="true">-&gt;</span></a>
           <a class="button secondary" href="#examples">View examples</a>
         </div>
         <ul class="trust-list" aria-label="SebsWebs benefits">
@@ -173,10 +171,10 @@
 
     <section class="examples section-pad" id="examples">
       <div class="section-heading compact">
-          <p class="eyebrow">Real work</p>
-          <h2>Real websites you can visit now.</h2>
-          <p>Current portfolio work from SebsWebs. More local client projects can be added here as they launch.</p>
-        </div>
+        <p class="eyebrow">Real work</p>
+        <h2>Real websites you can visit now.</h2>
+        <p>Current portfolio work from SebsWebs. More local client projects can be added here as they launch.</p>
+      </div>
 
       <div class="example-grid real-work-grid">
         <article class="example-item portfolio-item">
@@ -205,7 +203,7 @@
         <p class="eyebrow">How it works</p>
         <h2>A clear process from first chat to launch.</h2>
         <p>Every project follows the same simple route: understand the business, agree the scope, collect content, build the site, then launch once the final balance is paid.</p>
-        <a class="button primary dark" href="#pricing">View pricing <span aria-hidden="true">-></span></a>
+        <a class="button primary dark" href="#pricing">View pricing <span aria-hidden="true">-&gt;</span></a>
       </div>
 
       <ol class="process-list">
@@ -294,8 +292,8 @@
           <span>More help with wording, structure, polish and launch details.</span>
           <ul>
             <li>Everything in Local Business Site</li>
-            <li>Copywriting help from your notes</li>
-            <li>Analytics, launch checklist and polish pass</li>
+            <li>Content and structure support</li>
+            <li>Higher-polish visual presentation</li>
             <li>3 revisions and 30 days of small edits</li>
           </ul>
         </article>
@@ -399,7 +397,7 @@
           <input name="business" type="text" placeholder="Cafe, barber, plumber..." required>
         </label>
         <label>
-          Location in Essex
+          Business town or area
           <input name="location" type="text" placeholder="Chelmsford, Basildon, Brentwood..." required>
         </label>
         <label>
@@ -417,10 +415,11 @@
         </label>
         <label>
           Message
-          <textarea name="message" rows="5" placeholder="Tell me about the business, location in Essex, pages needed, and any examples you like."></textarea>
+          <textarea name="message" rows="5" placeholder="Tell me about the business, pages needed, and any examples you like."></textarea>
+          <span class="field-help">Do not include passwords, payment-card details or sensitive personal information.</span>
         </label>
-        <button class="button primary" type="submit" data-submit-button>Send quote request <span aria-hidden="true">-></span></button>
-        <p class="form-note" data-form-note>Submissions go to sebybanham@gmail.com.</p>
+        <button class="button primary" type="submit" data-submit-button>Send quote request <span aria-hidden="true">-&gt;</span></button>
+        <p class="form-note" data-form-note>SebsWebs uses your details to respond to your enquiry and prepare a quote. Submissions are processed by FormSubmit and delivered by email. Read the <a class="form-policy-link" href="privacy.html">Privacy Policy</a> for storage, retention and rights information.</p>
       </form>
 
       <div class="form-dialog" data-form-dialog hidden>
