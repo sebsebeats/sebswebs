@@ -10,7 +10,7 @@ const formDialogMessage = document.querySelector("[data-form-dialog-message]");
 const formDialogIcon = document.querySelector("[data-form-dialog-icon]");
 const formDialogCloseButtons = document.querySelectorAll("[data-form-dialog-close]");
 const fallbackEmail = "sebybanham@gmail.com";
-const defaultFormNote = formNote ? formNote.textContent : "";
+const defaultFormNote = formNote ? formNote.innerHTML : "";
 
 const setHeaderState = () => {
   if (!header) {
@@ -58,7 +58,7 @@ const buildFallbackEmail = (data) => {
     `Name: ${name}`,
     `Email: ${email}`,
     `Business type: ${business}`,
-    `Location in Essex: ${location}`,
+    `Business town or area: ${location}`,
     `Package: ${packageChoice}`,
     "",
     "Message:",
@@ -74,12 +74,17 @@ const buildFallbackEmail = (data) => {
   return `mailto:${fallbackEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
 
-const setFormState = (message, state) => {
+const setFormState = (message, state, useHtml = false) => {
   if (!formNote) {
     return;
   }
 
-  formNote.textContent = message;
+  if (useHtml) {
+    formNote.innerHTML = message;
+  } else {
+    formNote.textContent = message;
+  }
+
   if (state) {
     formNote.dataset.state = state;
   } else {
@@ -88,7 +93,7 @@ const setFormState = (message, state) => {
 };
 
 const resetFormState = () => {
-  setFormState(defaultFormNote, "");
+  setFormState(defaultFormNote, "", true);
 };
 
 const showFormDialog = ({ title, message, state }) => {
@@ -139,7 +144,6 @@ if (quoteForm && submitButton) {
 
     const business = data.get("business").trim();
     data.set("_subject", `SebsWebs quote request - ${business}`);
-    data.set("Source page", window.location.href);
 
     const fallbackUrl = buildFallbackEmail(data);
     const defaultButtonText = submitButton.innerHTML;

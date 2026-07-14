@@ -1,0 +1,25 @@
+/* Privacy-focused overrides kept separate from the main design stylesheet. */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+.field-help {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.form-policy-link {
+  color: var(--teal-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.form-policy-link:hover,
+.form-policy-link:focus-visible {
+  color: var(--teal);
+}
