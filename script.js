@@ -1,186 +1,219 @@
+const root = document.documentElement;
+const body = document.body;
 const header = document.querySelector("[data-header]");
-const menuToggle = document.querySelector(".menu-toggle");
-const navLinks = document.querySelectorAll(".site-nav a");
-const quoteForm = document.querySelector("[data-quote-form]");
-const formNote = document.querySelector("[data-form-note]");
-const submitButton = document.querySelector("[data-submit-button]");
-const formDialog = document.querySelector("[data-form-dialog]");
-const formDialogTitle = document.querySelector("[data-form-dialog-title]");
-const formDialogMessage = document.querySelector("[data-form-dialog-message]");
-const formDialogIcon = document.querySelector("[data-form-dialog-icon]");
-const formDialogCloseButtons = document.querySelectorAll("[data-form-dialog-close]");
-const fallbackEmail = "sebybanham@gmail.com";
-const defaultFormNote = formNote ? formNote.innerHTML : "";
+const menuButton = document.querySelector(".menu-toggle");
+const navLinks = [...document.querySelectorAll(".site-nav a")];
+const localNavLinks = navLinks.filter((link) => (link.getAttribute("href") || "").startsWith("#"));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const cinematic = getComputedStyle(root).getPropertyValue("--display").trim() !== "";
 
-const setHeaderState = () => {
-  if (!header) {
-    return;
+root.classList.add("js");
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+function closeMenu() {
+  if (!header || !menuButton) return;
+  header.classList.remove("is-open");
+  body.classList.remove("menu-open");
+  menuButton.setAttribute("aria-expanded", "false");
+  menuButton.setAttribute("aria-label", "Open menu");
+}
+
+function updatePageState() {
+  if (header) header.classList.toggle("is-scrolled", scrollY > 16);
+
+  const scrollable = document.documentElement.scrollHeight - innerHeight;
+  root.style.setProperty("--scroll-progress", `${scrollable > 0 ? clamp(scrollY / scrollable * 100, 0, 100) : 0}%`);
+
+  let activeId = "";
+  const marker = scrollY + innerHeight * 0.33;
+  localNavLinks.forEach((link) => {
+    const section = document.querySelector(link.getAttribute("href"));
+    if (section && section.offsetTop <= marker) activeId = section.id;
+  });
+  localNavLinks.forEach((link) => link.classList.toggle("is-active", link.getAttribute("href") === `#${activeId}`));
+}
+
+function setupNavigation() {
+  updatePageState();
+  addEventListener("scroll", updatePageState, { passive: true });
+  addEventListener("resize", () => {
+    updatePageState();
+    if (innerWidth > 1180) closeMenu();
+  });
+
+  if (header && menuButton) {
+    menuButton.addEventListener("click", () => {
+      const open = header.classList.toggle("is-open");
+      body.classList.toggle("menu-open", open);
+      menuButton.setAttribute("aria-expanded", String(open));
+      menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+  navLinks.forEach((link) => link.addEventListener("click", closeMenu));
+}
+
+function setupExperience() {
+  const progress = document.createElement("div");
+  progress.className = "scroll-progress";
+  progress.setAttribute("aria-hidden", "true");
+  body.prepend(progress);
+
+  if (!reduceMotion) {
+    const loader = document.createElement("div");
+    loader.className = "site-loader";
+    loader.setAttribute("aria-hidden", "true");
+    loader.innerHTML = '<div class="site-loader__inner"><span class="site-loader__brand">SebsWebs</span><span class="site-loader__count">0</span><span class="site-loader__line"></span></div>';
+    body.prepend(loader);
+    const count = loader.querySelector(".site-loader__count");
+    const start = performance.now();
+    const animate = (now) => {
+      const elapsed = clamp((now - start) / 900, 0, 1);
+      const value = Math.round((1 - Math.pow(1 - elapsed, 3)) * 100);
+      count.textContent = String(value).padStart(2, "0");
+      loader.style.setProperty("--loader-progress", `${value}%`);
+      if (elapsed < 1) return requestAnimationFrame(animate);
+      setTimeout(() => {
+        loader.classList.add("is-done");
+        setTimeout(() => loader.remove(), 760);
+      }, 120);
+    };
+    requestAnimationFrame(animate);
   }
 
-  header.classList.toggle("is-scrolled", window.scrollY > 8);
-};
-
-setHeaderState();
-if (header) {
-  window.addEventListener("scroll", setHeaderState, { passive: true });
-}
-
-if (menuToggle && header) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = header.classList.toggle("is-open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  const revealSelectors = [
+    ".hero-copy", ".hero-media", ".proof-grid > div", ".section-heading", ".service-item",
+    ".example-item", ".process-copy", ".process-list li", ".price-column", ".care-item",
+    ".scope-item", ".contact-copy", ".quote-form"
+  ];
+  const revealItems = [...document.querySelectorAll(revealSelectors.join(","))];
+  revealItems.forEach((item, index) => {
+    item.classList.add("will-reveal");
+    item.style.transitionDelay = `${Math.min(index % 5 * 70, 280)}ms`;
   });
-}
 
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    if (!header || !menuToggle) {
-      return;
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+  } else {
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    }), { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    revealItems.forEach((item) => observer.observe(item));
+  }
+
+  if (finePointer && !reduceMotion) {
+    const dot = document.createElement("div");
+    const ring = document.createElement("div");
+    dot.className = "cursor-dot";
+    ring.className = "cursor-ring";
+    dot.setAttribute("aria-hidden", "true");
+    ring.setAttribute("aria-hidden", "true");
+    body.append(dot, ring);
+    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
+    addEventListener("pointermove", (event) => {
+      x = event.clientX; y = event.clientY; body.classList.add("cursor-ready");
+    }, { passive: true });
+    document.querySelectorAll("a,button,input,select,textarea,.service-item,.example-item,.price-column,.care-item,.scope-item").forEach((item) => {
+      item.addEventListener("pointerenter", () => body.classList.add("cursor-hover"));
+      item.addEventListener("pointerleave", () => body.classList.remove("cursor-hover"));
+    });
+    const draw = () => {
+      rx += (x - rx) * 0.16; ry += (y - ry) * 0.16;
+      dot.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+      ring.style.transform = `translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;
+      requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+
+    const hero = document.querySelector(".hero");
+    const heroImage = document.querySelector(".hero-media img");
+    if (hero && heroImage) {
+      hero.addEventListener("pointermove", (event) => {
+        const rect = hero.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        heroImage.style.transform = `rotateY(${-5 + px * 7}deg) rotateX(${1 - py * 5}deg) translate3d(${px * 9}px,${py * 9}px,0)`;
+      }, { passive: true });
+      hero.addEventListener("pointerleave", () => heroImage.style.transform = "rotateY(-5deg) rotateX(1deg)");
     }
+  }
+}
 
-    header.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open menu");
+function setupForm() {
+  const form = document.querySelector("[data-quote-form]");
+  const note = document.querySelector("[data-form-note]");
+  const submit = document.querySelector("[data-submit-button]");
+  const dialog = document.querySelector("[data-form-dialog]");
+  const title = document.querySelector("[data-form-dialog-title]");
+  const message = document.querySelector("[data-form-dialog-message]");
+  const icon = document.querySelector("[data-form-dialog-icon]");
+  const defaultNote = note ? note.innerHTML : "";
+  const email = "sebybanham@gmail.com";
+
+  const closeDialog = () => {
+    if (!dialog) return;
+    dialog.hidden = true;
+    body.classList.remove("dialog-open");
+  };
+  document.querySelectorAll("[data-form-dialog-close]").forEach((button) => button.addEventListener("click", closeDialog));
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (dialog && !dialog.hidden) closeDialog(); else closeMenu();
   });
-});
 
-const buildFallbackEmail = (data) => {
-  const name = data.get("name").trim();
-  const email = data.get("email").trim();
-  const business = data.get("business").trim();
-  const location = data.get("location").trim();
-  const packageChoice = data.get("package");
-  const message = data.get("message").trim();
+  if (!form || !submit) return;
+  const showDialog = (dialogTitle, dialogMessage, state) => {
+    if (!dialog || !title || !message || !icon) return;
+    title.textContent = dialogTitle;
+    message.textContent = dialogMessage;
+    dialog.dataset.state = state;
+    icon.textContent = state === "success" ? "OK" : "!";
+    dialog.hidden = false;
+    body.classList.add("dialog-open");
+    dialog.querySelector("button")?.focus();
+  };
 
-  const subject = `SebsWebs quote request - ${business}`;
-  const body = [
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Business type: ${business}`,
-    `Business town or area: ${location}`,
-    `Package: ${packageChoice}`,
-    "",
-    "Message:",
-    message || "I would like a quote for a website.",
-    "",
-    "Useful details if you have them:",
-    "- Current website/domain:",
-    "- Pages needed:",
-    "- Photos/logo ready:",
-    "- Ideal deadline:"
-  ].join("\n");
-
-  return `mailto:${fallbackEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-};
-
-const setFormState = (message, state, useHtml = false) => {
-  if (!formNote) {
-    return;
-  }
-
-  if (useHtml) {
-    formNote.innerHTML = message;
-  } else {
-    formNote.textContent = message;
-  }
-
-  if (state) {
-    formNote.dataset.state = state;
-  } else {
-    delete formNote.dataset.state;
-  }
-};
-
-const resetFormState = () => {
-  setFormState(defaultFormNote, "", true);
-};
-
-const showFormDialog = ({ title, message, state }) => {
-  if (!formDialog || !formDialogTitle || !formDialogMessage || !formDialogIcon) {
-    return;
-  }
-
-  formDialogTitle.textContent = title;
-  formDialogMessage.textContent = message;
-  formDialog.dataset.state = state;
-  formDialogIcon.textContent = state === "success" ? "OK" : "!";
-  formDialog.hidden = false;
-  document.body.classList.add("dialog-open");
-
-  const closeButton = formDialog.querySelector("button");
-  if (closeButton) {
-    closeButton.focus();
-  }
-};
-
-const closeFormDialog = () => {
-  if (!formDialog) {
-    return;
-  }
-
-  formDialog.hidden = true;
-  document.body.classList.remove("dialog-open");
-};
-
-formDialogCloseButtons.forEach((button) => {
-  button.addEventListener("click", closeFormDialog);
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && formDialog && !formDialog.hidden) {
-    closeFormDialog();
-  }
-});
-
-if (quoteForm && submitButton) {
-  quoteForm.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    const data = new FormData(quoteForm);
-    if (data.get("_honey")) {
-      return;
-    }
-
-    const business = data.get("business").trim();
+    const data = new FormData(form);
+    if (data.get("_honey")) return;
+    const business = String(data.get("business") || "").trim();
     data.set("_subject", `SebsWebs quote request - ${business}`);
-
-    const fallbackUrl = buildFallbackEmail(data);
-    const defaultButtonText = submitButton.innerHTML;
+    const fallbackBody = [
+      `Name: ${String(data.get("name") || "").trim()}`,
+      `Email: ${String(data.get("email") || "").trim()}`,
+      `Business type: ${business}`,
+      `Business town or area: ${String(data.get("location") || "").trim()}`,
+      `Package: ${String(data.get("package") || "")}`,
+      "", "Message:", String(data.get("message") || "").trim() || "I would like a quote for a website."
+    ].join("\n");
+    const fallback = `mailto:${email}?subject=${encodeURIComponent(`SebsWebs quote request - ${business}`)}&body=${encodeURIComponent(fallbackBody)}`;
+    const originalButton = submit.innerHTML;
 
     try {
-      submitButton.disabled = true;
-      submitButton.innerHTML = "Sending request...";
-      setFormState("Sending your request...", "pending");
-
-      const response = await fetch(quoteForm.dataset.formEndpoint, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: data
-      });
-
-      if (!response.ok) {
-        throw new Error("Form submission failed");
-      }
-
-      quoteForm.reset();
-      resetFormState();
-      showFormDialog({
-        title: "Quote request sent",
-        message: "Thanks - your request has been sent. I will reply by email as soon as possible.",
-        state: "success"
-      });
+      submit.disabled = true;
+      submit.textContent = "Sending request...";
+      if (note) { note.textContent = "Sending your request..."; note.dataset.state = "pending"; }
+      const response = await fetch(form.dataset.formEndpoint, { method: "POST", headers: { Accept: "application/json" }, body: data });
+      if (!response.ok) throw new Error("Form submission failed");
+      form.reset();
+      if (note) { note.innerHTML = defaultNote; delete note.dataset.state; }
+      showDialog("Quote request sent", "Thanks - your request has been sent. I will reply by email as soon as possible.", "success");
     } catch (error) {
-      resetFormState();
-      showFormDialog({
-        title: "Email draft opened",
-        message: `The form could not send automatically, so an email draft has opened for ${fallbackEmail}. Send that email to make sure your request arrives.`,
-        state: "error"
-      });
-      window.location.href = fallbackUrl;
+      console.error("SebsWebs form submission error", error);
+      if (note) { note.innerHTML = defaultNote; delete note.dataset.state; }
+      showDialog("Email draft opened", `The form could not send automatically, so an email draft has opened for ${email}. Send that email to make sure your request arrives.`, "error");
+      location.href = fallback;
     } finally {
-      submitButton.disabled = false;
-      submitButton.innerHTML = defaultButtonText;
+      submit.disabled = false;
+      submit.innerHTML = originalButton;
     }
   });
 }
+
+if (cinematic) setupExperience();
+setupNavigation();
+setupForm();
