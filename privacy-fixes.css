@@ -102,3 +102,31 @@ html,body{overflow-x:clip}
   .package-grid .price-column:hover{background:rgba(6,29,27,.82)}
   .package-grid .price-column.featured:hover{background:var(--yellow)}
 }
+
+
+/* Single-offer pricing layout */
+.single-offer-grid,
+.single-care-grid {
+  grid-template-columns: minmax(0, 780px);
+  justify-content: center;
+}
+
+.single-offer-grid .price-column,
+.single-offer-grid .price-column:nth-child(4),
+.single-offer-grid .price-column:nth-child(5) {
+  grid-column: auto;
+  width: 100%;
+  min-height: 0;
+}
+
+.single-care-grid .care-item {
+  width: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 840px) {
+  .single-offer-grid,
+  .single-care-grid {
+    grid-template-columns: 1fr;
+  }
+}
