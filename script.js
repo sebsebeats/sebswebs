@@ -185,9 +185,7 @@ function setupForm() {
     const fallbackBody = [
       `Name: ${String(data.get("name") || "").trim()}`,
       `Email: ${String(data.get("email") || "").trim()}`,
-      `Business type: ${business}`,
-      `Business town or area: ${String(data.get("location") || "").trim()}`,
-      `Website goal: ${String(data.get("goal") || "")}`,
+      `Business name or type: ${business}`,
       `Offer: ${String(data.get("package") || "")}`,
       "", "Message:", String(data.get("message") || "").trim() || "I am interested in the £99 one-page website."
     ].join("\n");
