@@ -181,16 +181,17 @@ function setupForm() {
     const data = new FormData(form);
     if (data.get("_honey")) return;
     const business = String(data.get("business") || "").trim();
-    data.set("_subject", `SebsWebs quote request - ${business}`);
+    data.set("_subject", `SebsWebs £99 website enquiry - ${business}`);
     const fallbackBody = [
       `Name: ${String(data.get("name") || "").trim()}`,
       `Email: ${String(data.get("email") || "").trim()}`,
       `Business type: ${business}`,
       `Business town or area: ${String(data.get("location") || "").trim()}`,
-      `Package: ${String(data.get("package") || "")}`,
-      "", "Message:", String(data.get("message") || "").trim() || "I would like a quote for a website."
+      `Website goal: ${String(data.get("goal") || "")}`,
+      `Offer: ${String(data.get("package") || "")}`,
+      "", "Message:", String(data.get("message") || "").trim() || "I am interested in the £99 one-page website."
     ].join("\n");
-    const fallback = `mailto:${email}?subject=${encodeURIComponent(`SebsWebs quote request - ${business}`)}&body=${encodeURIComponent(fallbackBody)}`;
+    const fallback = `mailto:${email}?subject=${encodeURIComponent(`SebsWebs £99 website enquiry - ${business}`)}&body=${encodeURIComponent(fallbackBody)}`;
     const originalButton = submit.innerHTML;
 
     try {
@@ -201,7 +202,7 @@ function setupForm() {
       if (!response.ok) throw new Error("Form submission failed");
       form.reset();
       if (note) { note.innerHTML = defaultNote; delete note.dataset.state; }
-      showDialog("Quote request sent", "Thanks - your request has been sent. I will reply by email as soon as possible.", "success");
+      showDialog("Website enquiry sent", "Thanks - your request has been sent. I will reply by email as soon as possible.", "success");
     } catch (error) {
       console.error("SebsWebs form submission error", error);
       if (note) { note.innerHTML = defaultNote; delete note.dataset.state; }
