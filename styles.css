@@ -22,12 +22,14 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   min-width: 320px;
   margin: 0;
   overflow-x: hidden;
+  overflow-x: clip;
   color: var(--ink);
   background:
     radial-gradient(circle at 82% 4%, rgba(0, 161, 155, 0.18), transparent 28rem),
